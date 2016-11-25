@@ -1,0 +1,83 @@
+package model
+
+import model.geom.Point2d
+
+class VirtualCar {	
+	private static val wheelBase = 4.5
+	private static val minTurnRadius = 11.3d / 2d;
+	private static val maxSteeringWheelAngle = 450d;
+	
+	private var position : Point2d
+	private var heading : double
+	private var speed : double
+	
+	private var acceleration : double
+	private var wheelAngle : double
+	
+	public new {
+		position = new Point2d()
+		heading = 0
+		speed = 0
+		acceleration = 0
+	}
+	
+	public def update(dt : double) {
+		val frontAxleOffset = wheelBase / 2d
+
+		// Update speed
+		speed += acceleration * dt
+	
+		// Update position and heading
+		val frontAxleAngle = (this.wheelAngle / maxSteeringWheelAngle) * Math.asin(wheelBase / minTurnRadius) / 2d
+		
+		val frontAxleX = position.x + frontAxleOffset * Math.cos(heading)
+		val frontAxleY = position.y + frontAxleOffset * Math.sin(heading)
+		
+		val newFrontAxleX = frontAxleX + dt * speed + Math.cos(frontAxleAngle + heading)
+		val newFrontAxleY = frontAxleY + dt * speed + Math.sin(frontAxleAngle + heading)
+		
+		val newHeading = heading + dt * speed * Math.tan(frontAxleAngle) / wheelBase
+		
+		position.x = newFrontAxleX - frontAxleOffset * Math.cos(newHeading)
+		position.y = newFrontAxleY - frontAxleOffset * Math.sin(newHeading)
+		heading = newHeading
+	}
+	
+	public def getSpeed {
+		return speed;
+	}
+	
+	/**
+	 * Sets the acceleration
+	 */
+	public def setAcceleration(a : double) {
+		acceleration = a
+	}
+	
+	/**
+	 * Sets the wheel angle (bicycle model, and not steering wheel angle)
+	 */
+	public def setWheelAngle(w : double) {
+		wheelAngle = Math.max(-maxSteeringWheelAngle, Math.min(maxSteeringWheelAngle, w))
+	}
+	
+	public def getPosition {
+		position
+	}
+	
+	public def getHeading {
+		heading
+	}
+	
+	public static def getWheelBase{
+		wheelBase
+	}
+	
+	public static def getMinTurnRadius {
+		minTurnRadius
+	}
+	
+	public static def getMaxSteeringWheelAngle {
+		maxSteeringWheelAngle
+	}
+}

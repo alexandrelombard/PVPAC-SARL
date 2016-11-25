@@ -1,0 +1,5 @@
+package car.capacities.control
+
+capacity SteeringWheelControl {
+	def setSteeringWheelAngle(angle : double)
+}

@@ -1,0 +1,97 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>PVPAC-SARL</groupId>
+	<artifactId>PVPAC-SARL</artifactId>
+	<version>1.0-SNAPSHOT</version>
+
+	<properties>
+		<janus.version>0.5.0-SNAPSHOT</janus.version>
+		<sarl.version>0.5.0-SNAPSHOT</sarl.version>
+	</properties>
+
+	<build>
+		<sourceDirectory>src/main/sarl</sourceDirectory>
+		<resources>
+			<resource>
+				<directory>src/main/sarl</directory>
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+			</resource>
+			<resource>
+				<directory>src/main/generated-sources/sarl</directory>
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.5.1</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>io.sarl.maven</groupId>
+				<artifactId>sarl-maven-plugin</artifactId>
+				<version>${sarl.version}</version>
+				<extensions>true</extensions>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>io.sarl.maven</groupId>
+			<artifactId>io.sarl.maven.sdk</artifactId>
+			<version>${sarl.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>fr.utbm.set.gis</groupId>
+			<artifactId>giscore</artifactId>
+			<version>[5.0-SNAPSHOT,)</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>4.3.2.RELEASE</version>
+		</dependency>
+	</dependencies>
+
+	<repositories>
+		<repository>
+			<id>devmas-set</id>
+			<url>https://devmas-set.utbm.fr/maven</url>
+		</repository>
+		<repository>
+			<id>arakhne</id>
+			<url>http://download.tuxfamily.org/arakhne/maven</url>
+		</repository>
+		<repository>
+			<id>maven2-repository.dev.java.net</id>
+			<name>Java.net Maven 2 Repository</name>
+			<url>http://download.java.net/maven/2</url>
+			<layout>default</layout>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+</project>

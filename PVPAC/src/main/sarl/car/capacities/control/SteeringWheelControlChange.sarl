@@ -1,0 +1,15 @@
+/** 
+ * 
+ */
+package car.capacities.control
+/** 
+ * @author alombard
+ * 
+ */
+event SteeringWheelControlChange {
+	val steeringWheelAngle : double
+	
+	public new(steeringWheelAngle : double) {
+		this.steeringWheelAngle = steeringWheelAngle
+	}
+}

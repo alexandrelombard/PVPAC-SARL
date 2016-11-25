@@ -1,0 +1,9 @@
+package car.capacities.control
+
+/** 
+ * @author alombard
+ * 
+ */
+capacity AccelerationControl {
+	def accelerate(a : double)
+}

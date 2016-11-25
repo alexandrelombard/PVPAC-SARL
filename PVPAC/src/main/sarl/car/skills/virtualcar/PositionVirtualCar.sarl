@@ -1,0 +1,28 @@
+package car.skills.virtualcar
+
+import car.capacities.data.PositionProvider
+import car.capacities.data.OdometryProvider
+import model.geom.Point2d
+import model.VirtualCar
+
+skill PositionVirtualCar implements PositionProvider, OdometryProvider {
+	
+	val virtualCar : VirtualCar
+	
+	public new(virtualCar : VirtualCar) {
+		this.virtualCar = virtualCar 
+	}
+
+	override getPosition : Point2d {
+		this.virtualCar.position
+	}
+	
+	override getHeading : double {
+		this.virtualCar.heading
+	}
+
+	override getSpeed : double {
+		this.virtualCar.speed
+	}
+
+}

@@ -1,0 +1,69 @@
+/** 
+ * 
+ */
+package view
+
+import java.util.HashMap
+
+import io.sarl.lang.core.Agent
+import io.sarl.core.AgentKilled
+import io.sarl.core.AgentSpawned
+import io.sarl.core.Initialize
+import io.sarl.core.Schedules
+
+import javafx.application.Application
+import javafx.application.Platform
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import io.sarl.lang.core.Address
+import car.events.PositionChanged
+import io.sarl.util.OpenEventSpace
+import io.sarl.core.DefaultContextInteractions
+import java.util.UUID
+import io.sarl.util.OpenEventSpaceSpecification
+import car.ControlVirtualCarAgent
+import io.sarl.core.Logging
+
+/** 
+ * @author alombard
+ * 
+ */
+agent SimulationViewAgent {
+	uses DefaultContextInteractions, Logging, Schedules
+	
+	private val carsView = new HashMap<Address, ImageView>();
+	
+	on Initialize {
+		in(0)[Application.launch(SimulationView)]
+	}
+	
+	on AgentSpawned [occurrence.agentType === ControlVirtualCarAgent.typeName] {		
+		val carView = new ImageView(new Image("car.png"))
+		carView.setFitHeight(5d);
+		carView.setFitWidth(5d);
+
+		carsView.put(occurrence.source, carView)
+
+		Platform.runLater([SimulationView.instance.root.children.add(carView)])
+	}
+	
+	on AgentKilled [occurrence.agentType === ControlVirtualCarAgent.typeName] {
+		val carView = carsView.get(occurrence.source)
+		
+		if (carView != null) {
+			carsView.remove(occurrence.source)
+			
+			Platform.runLater([SimulationView.instance.root.children.remove(carView)])
+		}
+	}
+	
+	on PositionChanged {
+		val carView = carsView.get(occurrence.source)
+		
+		if(carView != null) {
+			carView.layoutX = occurrence.position.x
+			carView.layoutY = occurrence.position.y
+			carView.rotate = occurrence.heading / Math.PI * 180d
+		}
+	}
+}

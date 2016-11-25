@@ -1,0 +1,64 @@
+/** 
+ * 
+ */
+package driver
+
+import java.util.ArrayList
+
+import io.sarl.core.DefaultContextInteractions
+import io.sarl.core.Initialize
+
+import car.capacities.control.AccelerationControlChange
+import car.capacities.control.SteeringWheelControlChange
+import car.events.PositionChanged
+import car.events.SpeedChanged
+import driver.capacities.CruiseControl
+import driver.capacities.FollowTrack
+import driver.capacities.MapMatching
+import model.map.Track
+import model.geom.Point2d
+import model.map.ProjectionModel
+
+/** 
+ * @author alombard
+ * 
+ */
+agent DriverAgent {
+	
+	uses DefaultContextInteractions
+	uses CruiseControl
+	uses FollowTrack
+	uses MapMatching
+	
+	var speed = 0d
+	
+	var track : Track
+	
+	on Initialize {
+		setSkill(new DefaultMapMatching, MapMatching)
+		setSkill(new ImprovedPurePursuit, FollowTrack)
+		setSkill(new DefaultCruiseControl, CruiseControl)
+	
+		// Initialize track
+		val points = new ArrayList<Point2d>();
+		points.add(new Point2d(0, 160))
+		points.add(new Point2d(4000, 160))
+		
+		this.track = new Track("track", ProjectionModel.LAMBERT2E, points)
+	}
+
+	on PositionChanged {
+		val mapMatchedLength = mapMatching(occurrence.position, this.track)
+		val steeringWheelAngle = followTrack(occurrence.position, occurrence.heading, mapMatchedLength, this.speed, this.track)
+		
+		emit(new SteeringWheelControlChange(steeringWheelAngle))
+	}
+	
+	on SpeedChanged {
+		this.speed = occurrence.speed
+		
+		val acceleration = computeAcceleration(10, speed, -2, 2, 0.1)
+		
+		emit(new AccelerationControlChange(acceleration))
+	}
+}

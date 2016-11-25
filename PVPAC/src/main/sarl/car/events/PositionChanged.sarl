@@ -1,0 +1,20 @@
+/** 
+ * 
+ */
+package car.events
+
+import model.geom.Point2d
+
+/** 
+ * @author alombard
+ * 
+ */
+event PositionChanged {
+	val position : Point2d
+	val heading : double
+	
+	public new(position : Point2d, heading : double) {
+		this.position = position
+		this.heading = heading
+	}
+}

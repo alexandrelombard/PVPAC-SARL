@@ -1,0 +1,35 @@
+package driver
+
+import driver.capacities.FollowTrack
+import model.geom.Point2d
+import model.map.Track
+import model.VirtualCar
+
+skill ImprovedPurePursuit implements FollowTrack {
+
+	override followTrack(position : Point2d, heading : double, mapMatchedLength : double, speed : double, track : Track) : double {
+		val targetDistance = mapMatchedLength + speed
+		val targetPoint = track.getPoint(targetDistance % track.getLength())
+
+		val e = VirtualCar.wheelBase
+		val xc = targetPoint.x
+		val yc = targetPoint.y
+		val xv = position.x + e / 2d * Math.cos(heading)
+		val yv = position.y + e / 2d * Math.sin(heading)
+		val alpha = heading
+		
+		val k = 2.3
+		val delta = Math.asin((k * e * ((yc - yv) * Math.cos(alpha) - (xc - xv) * Math.sin(alpha))) / (Math.pow(xc - xv, 2) + Math.pow(yc - yv, 2)))
+
+		// Define wheel angle
+        val maxDelta = Math.atan((VirtualCar.minTurnRadius / 2d) / e)
+		
+		var wheelAngle = Math.min(VirtualCar.maxSteeringWheelAngle, Math.max(-VirtualCar.maxSteeringWheelAngle, delta / maxDelta * VirtualCar.maxSteeringWheelAngle))
+
+		if (Double.isNaN(delta))
+			wheelAngle = 0
+		
+		return wheelAngle
+	}
+
+}

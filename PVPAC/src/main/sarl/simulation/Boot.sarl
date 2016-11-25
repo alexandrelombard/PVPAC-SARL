@@ -1,0 +1,37 @@
+package simulation
+
+/** 
+ * 
+ */
+
+import io.sarl.core.DefaultContextInteractions
+import io.sarl.core.Initialize
+import io.sarl.core.Lifecycle
+
+import car.ControlVirtualCarAgent
+
+import view.SimulationViewAgent
+import driver.DriverAgent
+import view.SimulationView
+
+/** 
+ * @author alombard
+ * 
+ */
+agent Boot {
+	uses DefaultContextInteractions, Lifecycle
+	
+	on Initialize {		
+		// Boot agents
+		spawn(SimulationViewAgent)
+		
+		synchronized (SimulationView) {
+			SimulationView.wait
+		}
+		
+		spawn(DriverAgent)
+		spawn(ControlVirtualCarAgent)
+		
+		killMe
+	}
+}

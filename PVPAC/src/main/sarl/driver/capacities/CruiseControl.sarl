@@ -1,0 +1,19 @@
+/** 
+ * 
+ */
+package driver.capacities
+/** 
+ * @author alombard
+ * 
+ */
+capacity CruiseControl {
+	/**
+	 * Computes the acceleration to reach the target speed
+	 * @param targetSpeed the target speed
+	 * @param speed the current speed
+	 * @param maxDeceleration the maximum deceleration value (usually a negative value)
+	 * @param maxAcceleration the maximum acceleration value (usually a positive value)
+	 * @param deltaTime the expected maximum reaction time
+	 */
+	def computeAcceleration(targetSpeed : double, speed : double, maxDeceleration : double, maxAcceleration : double, deltaTime : double) : double
+}

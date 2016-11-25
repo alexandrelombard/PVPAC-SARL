@@ -1,0 +1,15 @@
+/** 
+ * 
+ */
+package driver.capacities
+
+import model.map.Track
+import model.geom.Point2d
+
+/** 
+ * @author alombard
+ * 
+ */
+capacity MapMatching {
+	def mapMatching(position : Point2d, track : Track) : double
+}

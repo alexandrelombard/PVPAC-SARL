@@ -1,0 +1,62 @@
+/** 
+ * 
+ */
+package car
+
+import io.sarl.core.DefaultContextInteractions
+import io.sarl.core.Destroy
+import io.sarl.core.Initialize
+import io.sarl.core.Schedules
+
+import car.capacities.control.AccelerationControl
+import car.capacities.control.AccelerationControlChange
+import car.capacities.control.SteeringWheelControl
+import car.capacities.control.SteeringWheelControlChange
+import car.capacities.data.OdometryProvider
+import car.capacities.data.PositionProvider
+import car.events.PositionChanged
+import car.events.SpeedChanged
+import car.skills.virtualcar.ControlVirtualCar
+import car.skills.virtualcar.PositionVirtualCar
+import model.VirtualCar
+
+/** 
+ * @author alombard
+ * 
+ */
+agent ControlVirtualCarAgent {
+	
+	uses DefaultContextInteractions, Schedules
+	uses AccelerationControl, SteeringWheelControl
+	uses PositionProvider, OdometryProvider
+	
+	on Initialize {
+		val virtualCar = new VirtualCar()
+		
+		// Add skill control virtual car
+		setSkill(new ControlVirtualCar(virtualCar))
+		
+		// Add skill to position virtual car
+		setSkill(new PositionVirtualCar(virtualCar))
+		
+		// Configure pro-active behavior (update car)
+		every(30) [
+			virtualCar.update(0.030)
+			
+			emit(new PositionChanged(position, heading))
+			emit(new SpeedChanged(speed))
+		]
+	}
+	
+	on AccelerationControlChange {
+		accelerate(occurrence.acceleration)
+	}
+	
+	on SteeringWheelControlChange {
+		steeringWheelAngle = occurrence.steeringWheelAngle
+	}
+	
+	on Destroy {
+		//
+	}
+}

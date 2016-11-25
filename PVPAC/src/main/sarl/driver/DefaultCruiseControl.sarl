@@ -1,0 +1,11 @@
+package driver
+
+import driver.capacities.CruiseControl
+
+skill DefaultCruiseControl implements CruiseControl {
+
+	override computeAcceleration(targetSpeed : double, speed : double, maxDeceleration : double, maxAcceleration : double, deltaTime : double) : double {
+		return Math.max(maxDeceleration, Math.min(maxAcceleration, (targetSpeed - speed) / deltaTime))
+	}
+	
+}

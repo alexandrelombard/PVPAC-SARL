@@ -1,0 +1,77 @@
+package view
+
+import javafx.application.Application
+import javafx.application.Platform
+import javafx.scene.Cursor;
+import javafx.scene.Group
+import javafx.scene.Scene
+import javafx.scene.layout.Pane
+import javafx.stage.Stage
+
+import io.sarl.lang.core.Agent
+
+class SimulationView extends Application {
+	
+	private static var instance : SimulationView
+	
+	private static val scaleDelta = 1.1
+
+	private val root = new Pane();
+
+	override start(stage : Stage) throws Exception {
+		instance = this
+		
+		// Configure stage
+		this.root.onScroll = [e |
+			e.consume()
+	
+            if (e.getDeltaY() == 0) {
+                return
+            }
+	
+            val scaleFactor = if (e.getDeltaY() > 0) scaleDelta else 1d / scaleDelta
+	
+			this.root.setScaleX(this.root.getScaleX() * scaleFactor)
+			this.root.setScaleY(this.root.getScaleY() * scaleFactor)
+		]
+
+		val dragDelta = new Delta();
+		this.root.onMousePressed = [mouseEvent |
+			dragDelta.x = root.getLayoutX() - mouseEvent.getSceneX()
+			dragDelta.y = root.getLayoutY() - mouseEvent.getSceneY()
+			root.setCursor(Cursor.MOVE)
+		]
+		this.root.onMouseReleased = [mouseEvent | root.setCursor(Cursor.HAND)]
+		this.root.onMouseDragged = [mouseEvent | 
+			root.setLayoutX(mouseEvent.getSceneX() + dragDelta.x)
+			root.setLayoutY(mouseEvent.getSceneY() + dragDelta.y)
+		]
+		this.root.onMouseEntered = [mouseEvent | root.setCursor(Cursor.HAND)]
+		
+		// Show the stage
+        val scene = new Scene(this.root, 640, 480);
+
+		stage.setTitle("PVPAC simulation");
+		stage.setScene(scene);
+		stage.show();
+		
+		stage.setOnCloseRequest([Platform.exit()])
+		
+		synchronized (SimulationView) {
+			SimulationView.notifyAll			
+		}
+	}
+
+	public def getRoot() {
+		return root;
+	}
+	
+	public static def getInstance() {
+		return instance
+	}
+	
+	private static class Delta {
+		public var x : double
+		public var y : double
+	}
+}

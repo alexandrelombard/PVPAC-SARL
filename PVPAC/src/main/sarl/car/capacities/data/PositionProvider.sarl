@@ -1,0 +1,15 @@
+/** 
+ * 
+ */
+package car.capacities.data
+
+import model.geom.Point2d
+
+/** 
+ * @author alombard
+ * 
+ */
+capacity PositionProvider {
+	def getPosition() : Point2d
+	def getHeading() : double
+}

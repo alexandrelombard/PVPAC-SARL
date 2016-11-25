@@ -1,0 +1,11 @@
+/** 
+ * 
+ */
+package car.capacities.data
+/** 
+ * @author alombard
+ * 
+ */
+capacity OdometryProvider {
+	def getSpeed() : double
+}

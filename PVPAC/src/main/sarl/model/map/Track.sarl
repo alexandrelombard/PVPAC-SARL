@@ -1,0 +1,152 @@
+package model.map
+
+import java.util.List
+import model.geom.Point2d
+import java.util.ArrayList
+import java.util.Collections
+
+enum ProjectionModel {
+	LAMBERT2E,
+	WGS84
+}
+
+class Track {
+	
+	// Content
+	val projectionModel : ProjectionModel
+	val points : List<Point2d>
+	
+	// Computed data
+	val lengths : List<Double> = new ArrayList<Double>
+	
+	// Meta data
+	val name : String
+	
+	public new(name : String, projectionModel : ProjectionModel, points : List<Point2d>) {
+		this.name = name
+		this.projectionModel = projectionModel
+		this.points = points
+
+		// Compute the distance of each point from the start point
+        if (projectionModel == ProjectionModel.LAMBERT2E) {
+            // For Lambert projections, the distance between two points is the euclidian distance
+            var length = 0d;
+
+            // Add the length of the first point
+            if(this.points.size() > 0) {
+                this.lengths.add(length);
+            }
+
+            // For each point, register the distance with the last point
+            for(var idx = 1; idx < points.size(); idx++) {
+				length += this.points.get(idx - 1).distance(this.points.get(idx));
+				this.lengths.add(length);
+			}
+		}		
+		else if (projectionModel == ProjectionModel.WGS84) {
+            // For WGS84 we use the formula for the distance between two WGS84 points
+            var length = 0d;
+
+            // Add the length of the first point
+            if(this.points.size() > 0) {
+                this.lengths.add(length);
+            }
+
+            // For each point, register the distance with the last point
+            for(var idx = 1; idx < points.size(); idx++) {
+                length += getWGS84Distance(this.points.get(idx - 1), this.points.get(idx));
+                this.lengths.add(length);
+            }
+        }
+	}
+
+	public def getPoints() {
+		Collections.unmodifiableList(this.points)
+	}
+
+	public def getPoint(length : double) {
+		var l = length;
+		
+        if(l < 0) {
+            l += this.getLength();
+		}
+
+        if (l == 0) {
+            return this.points.get(0);
+        }
+
+        var idx = 0;
+        while (idx < this.lengths.size() && this.lengths.get(idx) < l) {
+            idx++;
+        }
+
+        if(idx == this.lengths.size())
+            return this.points.get(idx - 1);
+
+        val a = this.points.get(idx - 1);
+        val b = this.points.get(idx);
+
+        val ratio = (l - this.lengths.get(idx - 1)) / (this.lengths.get(idx) - this.lengths.get(idx - 1));
+
+        return new Point2d(a.x * (1 - ratio) + b.x * ratio, a.y * (1 - ratio) + b.y * ratio);
+    }
+
+	public def getLength() {
+        this.lengths.get(this.lengths.size() - 1)
+	}
+
+	public def getName() {
+        this.name
+    }
+
+	public def getLengths() {
+        this.lengths
+	}
+	
+	/**
+	 * Get the length of a point
+	 * @param point the point
+	 * @return the length of the point or Double.NaN if the point does not belong to the map
+	 */
+	public def getLength(point : Point2d) {
+		val index = this.points.indexOf(point);
+
+        if(index == -1) {
+            return Double.NaN;
+        }
+
+        return this.lengths.get(index);
+    }
+    
+	/** 
+	 * Get the length of a point by its index
+	 * @param idx the index
+	 * @return the length of the point
+	 * @throws java.lang.IndexOutOfBoundsException thrown if <code>idx</code> is out of the bounds of the map
+ 	*/
+	public def getLength(idx : int) {
+        this.lengths.get(idx)
+    }
+    
+    
+	/** 
+	 * Get the distance in meters between two WGS84 points using Haversine formula
+	 * @param a the first point
+	 * @param b the second point
+	 * @return the distance in meters
+	 */
+    private static def getWGS84Distance(a : Point2d, b : Point2d) {
+		val AVERAGE_RADIUS_OF_EARTH = 6371009d
+
+        val latDistance = Math.toRadians(b.x - a.x)
+		val lngDistance = Math.toRadians(b.y - a.y)
+
+		val h = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+                + Math.cos(Math.toRadians(b.x)) * Math.cos(Math.toRadians(a.x))
+                * Math.sin(lngDistance / 2) * Math.sin(lngDistance / 2)
+
+		val c = 2 * Math.atan2(Math.sqrt(h), Math.sqrt(1 - h))
+
+        AVERAGE_RADIUS_OF_EARTH * c
+	}
+}

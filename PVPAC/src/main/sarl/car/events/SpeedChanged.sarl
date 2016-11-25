@@ -1,0 +1,15 @@
+/** 
+ * 
+ */
+package car.events
+/** 
+ * @author alombard
+ * 
+ */
+event SpeedChanged {
+	val speed : double
+	
+	public new(speed : double) {
+		this.speed = speed
+	}
+}

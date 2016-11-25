@@ -1,0 +1,24 @@
+package car.skills.virtualcar
+
+import car.capacities.control.AccelerationControl
+import car.capacities.control.SteeringWheelControl
+
+import model.VirtualCar
+
+skill ControlVirtualCar implements AccelerationControl, SteeringWheelControl {
+	
+	val virtualCar : VirtualCar
+	
+	public new(virtualCar : VirtualCar) {
+		this.virtualCar = virtualCar
+	}
+
+	override accelerate(a : double) {
+		virtualCar.acceleration = a
+	}
+
+	override setSteeringWheelAngle(angle : double) {
+		virtualCar.wheelAngle = angle
+	}
+
+}

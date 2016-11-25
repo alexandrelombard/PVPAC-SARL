@@ -1,0 +1,15 @@
+/** 
+ * 
+ */
+package car.capacities.control
+/** 
+ * @author alombard
+ * 
+ */
+event AccelerationControlChange {
+	val acceleration : double
+	
+	public new(acceleration : double) {
+		this.acceleration = acceleration;
+	}
+}

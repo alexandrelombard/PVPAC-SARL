@@ -1,0 +1,53 @@
+package driver
+
+import fr.utbm.set.geom.GeometryUtil
+
+import driver.capacities.MapMatching
+import model.map.Track
+import model.geom.Point2d
+
+skill DefaultMapMatching implements MapMatching {
+
+	override mapMatching(position : Point2d, track : Track) : double {
+		// We compute the map-matched positionning
+        if (track == null || position == null) {
+			throw new IllegalArgumentException()
+		}
+		
+        val px = position.x
+		val py = position.y
+                
+        val p = new Point2d(px, py);
+
+        // Iterate other the segments of the map (which is actually a polyline) and project the input point on each
+        // segment. The closer one is the resulting point.
+        var minDistance = Double.POSITIVE_INFINITY;
+        var resultX = position.x;
+        var resultY = position.y;
+        var resultLength = 0d;
+
+        for (var idx = 0; idx < track.getPoints().size() - 1; idx++) {
+			val s0 = track.getPoints().get(idx);
+			val s0length = track.getLength(idx);
+			val s1 = track.getPoints().get(idx + 1);
+			val s1length = track.getLength(idx + 1);
+
+			val projection = Math.min(1, Math.max(0, GeometryUtil.projectsPointOnSegment(px, py, s0.x, s0.y, s1.x, s1.y)));
+			val projectionPointX = s0.x * (1 - projection) + s1.x * projection;
+			val projectionPointY = s0.y * (1 - projection) + s1.y * projection;
+			val projectionPointLength = s0length * (1 - projection) + s1length * projection;
+
+			val distance = p.distance(new Point2d(projectionPointX, projectionPointY));
+
+			if (distance < minDistance) {
+				minDistance = distance;
+				resultX = projectionPointX;
+				resultY = projectionPointY;
+				resultLength = projectionPointLength;
+			}
+		}
+		
+		return resultLength
+	}
+
+}
