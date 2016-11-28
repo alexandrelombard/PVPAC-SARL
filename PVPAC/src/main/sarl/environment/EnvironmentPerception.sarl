@@ -1,0 +1,13 @@
+package environment
+
+import java.util.List
+
+public event EnvironmentPerception {
+	
+	val perceptions : List<EnvironmentObject>
+	
+	public new(perceptions : List<EnvironmentObject>) {
+		this.perceptions = perceptions
+	}
+	
+}
