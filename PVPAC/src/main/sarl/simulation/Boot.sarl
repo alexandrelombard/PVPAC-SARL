@@ -40,7 +40,7 @@ agent Boot {
 		}
 		
 		// Spawn vehicles
-		val internalVehicleSpace = SpaceUtils.getOrCreateSpaceWithSpec(defaultContext, typeof(OpenEventSpaceSpecification), "INTERNAL_VEHICLE")
+		val internalVehicleSpace = defaultContext.createSpace(typeof(OpenEventSpaceSpecification), UUID.randomUUID())
 		
 		spawn(DriverAgent, internalVehicleSpace)
 		spawn(ControlVirtualCarAgent, internalVehicleSpace, environmentSpace, modelViewSpace)
