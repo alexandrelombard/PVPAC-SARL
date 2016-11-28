@@ -22,7 +22,7 @@ import io.sarl.core.Logging
  * 
  */
 agent Boot {
-	uses DefaultContextInteractions, Lifecycle, Logging
+	uses DefaultContextInteractions, Lifecycle
 	
 	on Initialize {
 		

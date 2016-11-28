@@ -13,6 +13,7 @@ import driver.capacities.CruiseControl
 import driver.capacities.MapMatching
 import car.capacities.control.AccelerationControlChange
 import driver.capacities.FollowTrack
+import io.sarl.util.OpenEventSpace
 
 /** 
  * @author alombard
@@ -25,20 +26,24 @@ behavior FollowTrackBehavior {
 	uses FollowTrack
 	uses MapMatching
 	
+	private var ^space : OpenEventSpace
+	
 	private var track : Track
 	
 	private var speed : double
 	
-	public new(^agent : Agent, track : Track) {
+	public new(^agent : Agent, ^space : OpenEventSpace, track : Track) {
 		super(^agent)
+		this.^space = ^space
 		this.track = track
 	}
 	
 	on PositionChanged {
 		val mapMatchedLength = mapMatching(occurrence.position, this.track)
-		val steeringWheelAngle = followTrack(occurrence.position, occurrence.heading, mapMatchedLength, this.speed, this.track)
+		val steeringWheelAngle = followTrack(occurrence.position, occurrence.heading, mapMatchedLength, this.speed,
+			this.track)
 
-		emit(new SteeringWheelControlChange(steeringWheelAngle))
+		^space.emit(new SteeringWheelControlChange(steeringWheelAngle))
 	}
 
 	on SpeedChanged {
@@ -46,6 +51,6 @@ behavior FollowTrackBehavior {
 
 		val acceleration = computeAcceleration(10, speed, -2, 2, 0.1)
 
-		emit(new AccelerationControlChange(acceleration))
+		^space.emit(new AccelerationControlChange(acceleration))
 	}
 }

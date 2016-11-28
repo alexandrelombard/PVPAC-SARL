@@ -31,11 +31,21 @@ agent DriverAgent {
 	
 	uses Behaviors
 	
-	var track : Track
+	private var track : Track
+
+	private var internalVehicleSpace : OpenEventSpace
 	
 	on Initialize {
+		// Check parameters
+		if(occurrence.parameters.size < 1 || !(occurrence.parameters.get(0) instanceof OpenEventSpace)) {
+			throw new IllegalArgumentException("First argument must be of type OpenEventSpace (internal vehicle space)")
+		}
+		
 		// Register to appropriate spaces
 		occurrence.parameters.forEach[o|if (o instanceof OpenEventSpace) o.register(asEventListener())]
+		
+		// Initialize spaces
+		this.internalVehicleSpace = occurrence.parameters.get(0) as OpenEventSpace
 		
 		// Initialize skills
 		setSkill(new DefaultMapMatching, MapMatching)
@@ -50,7 +60,7 @@ agent DriverAgent {
 		this.track = new Track("track", ProjectionModel.LAMBERT2E, points)
 		
 		// Initialize behavior
-		val followTrackBehavior = new FollowTrackBehavior(this, this.track)
+		val followTrackBehavior = new FollowTrackBehavior(this, this.internalVehicleSpace, this.track)
 		
 		registerBehavior(followTrackBehavior)
 	}

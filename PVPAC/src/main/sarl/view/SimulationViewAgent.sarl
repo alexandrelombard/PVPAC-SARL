@@ -34,6 +34,7 @@ agent SimulationViewAgent {
 	
 	private val carsView = new HashMap<Address, ImageView>();
 	
+	
 	on Initialize {
 		// Register to appropriate spaces
 		occurrence.parameters.forEach([o|if(o instanceof OpenEventSpace) o.register(asEventListener())])
