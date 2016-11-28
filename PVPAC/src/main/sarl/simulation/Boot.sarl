@@ -4,9 +4,7 @@ package simulation
  * 
  */
 
-import io.sarl.core.DefaultContextInteractions
 import io.sarl.core.Initialize
-import io.sarl.core.Lifecycle
 
 import car.ControlVirtualCarAgent
 
@@ -16,12 +14,15 @@ import view.SimulationView
 import io.sarl.util.OpenEventSpaceSpecification
 import java.util.UUID
 import io.sarl.core.Logging
+import io.sarl.core.DefaultContextInteractions
+import io.sarl.core.Lifecycle
 
 /** 
  * @author alombard
  * 
  */
 agent Boot {
+	
 	uses DefaultContextInteractions, Lifecycle
 	
 	on Initialize {

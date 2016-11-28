@@ -30,10 +30,10 @@ import io.sarl.core.Behaviors
  * 
  */
 agent SimulationViewAgent {
+	
 	uses Behaviors, DefaultContextInteractions, Logging, Schedules
 	
 	private val carsView = new HashMap<Address, ImageView>();
-	
 	
 	on Initialize {
 		if(occurrence.parameters.size < 1) {

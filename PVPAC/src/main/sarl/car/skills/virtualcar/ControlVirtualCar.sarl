@@ -16,6 +16,7 @@ skill ControlVirtualCar implements AccelerationControl, SteeringWheelControl {
 	override setAcceleration(a : double) {
 		virtualCar.acceleration = a
 	}
+	
 
 	override setSteeringWheelAngle(angle : double) {
 		virtualCar.wheelAngle = angle
