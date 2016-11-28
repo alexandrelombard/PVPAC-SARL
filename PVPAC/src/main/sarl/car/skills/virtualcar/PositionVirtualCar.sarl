@@ -24,5 +24,4 @@ skill PositionVirtualCar implements PositionProvider, OdometryProvider {
 	override getSpeed : double {
 		this.virtualCar.speed
 	}
-
 }

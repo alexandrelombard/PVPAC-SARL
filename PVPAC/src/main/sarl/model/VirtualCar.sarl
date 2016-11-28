@@ -16,9 +16,9 @@ class VirtualCar {
 	
 	public new {
 		position = new Point2d()
-		heading = 0
-		speed = 0
-		acceleration = 0
+		heading = 0d
+		speed = 0d
+		acceleration = 0d
 	}
 	
 	public def update(dt : double) {
@@ -33,13 +33,14 @@ class VirtualCar {
 		val frontAxleX = position.x + frontAxleOffset * Math.cos(heading)
 		val frontAxleY = position.y + frontAxleOffset * Math.sin(heading)
 		
-		val newFrontAxleX = frontAxleX + dt * speed + Math.cos(frontAxleAngle + heading)
-		val newFrontAxleY = frontAxleY + dt * speed + Math.sin(frontAxleAngle + heading)
+		val newFrontAxleX = frontAxleX + dt * speed * Math.cos(frontAxleAngle + heading)
+		val newFrontAxleY = frontAxleY + dt * speed * Math.sin(frontAxleAngle + heading)
 		
 		val newHeading = heading + dt * speed * Math.tan(frontAxleAngle) / wheelBase
 		
 		position.x = newFrontAxleX - frontAxleOffset * Math.cos(newHeading)
 		position.y = newFrontAxleY - frontAxleOffset * Math.sin(newHeading)
+
 		heading = newHeading
 	}
 	
