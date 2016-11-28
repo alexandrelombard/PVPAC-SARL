@@ -1,11 +1,19 @@
-package driver
+package car.skills.virtualcar
 
-import driver.capacities.ObstaclePerception
+import car.capacities.data.ObstaclePerception
 import java.util.List
 import environment.EnvironmentObject
+import environment.EnvironmentPerception
 
-public skill RadarPerception implements ObstaclePerception {
+public skill RadarPerceptionVirtualCar implements ObstaclePerception {
+	
+	private var perceptions : List<EnvironmentObject>
+	
 	override def perceiveObstacles() : List<EnvironmentObject> {
-		// TODO
+		return this.perceptions
+	}
+	
+	on EnvironmentPerception {
+		this.perceptions = occurrence.perceptions
 	}
 }

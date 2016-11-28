@@ -21,7 +21,7 @@ agent Environment {
 	
 	uses Behaviors
 	
-	private val environment = new HashMap<UUID, VirtualCar>()
+	private val environment = new HashMap<UUID, EnvironmentObject>()
 	
 	private var environmentSpace : OpenEventSpace
 	
@@ -42,7 +42,7 @@ agent Environment {
 	}
 	
 	on AgentSpawned [occurrence.agentType === ControlVirtualCarAgent.typeName] {
-		// TODO Create an abstract representation of the virtual car
+		// TODO Schedule generation of perceptions
 	}
 
 	on AgentKilled [occurrence.agentType === ControlVirtualCarAgent.typeName] {
