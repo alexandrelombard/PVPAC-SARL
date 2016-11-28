@@ -1,0 +1,51 @@
+/** 
+ * 
+ */
+package environment
+
+import io.sarl.core.AgentSpawned
+import car.ControlVirtualCarAgent
+import io.sarl.core.AgentKilled
+import java.util.HashMap
+import java.util.UUID
+import model.VirtualCar
+import io.sarl.core.Initialize
+import io.sarl.util.OpenEventSpace
+import io.sarl.core.Behaviors
+
+/** 
+ * @author alombard
+ * 
+ */
+agent Environment {
+	
+	uses Behaviors
+	
+	private val environment = new HashMap<UUID, VirtualCar>()
+	
+	private var environmentSpace : OpenEventSpace
+	
+	on Initialize {
+		// First parameter is environment space
+		if(occurrence.parameters.size() < 1) {
+			throw new IllegalArgumentException("Environment space is not defined")
+		}
+		
+		if(!(occurrence.parameters.get(0) instanceof OpenEventSpace)) {
+			throw new IllegalArgumentException("First parameter must be of type OpenEventSpace (environment space)")
+		}
+		
+		this.environmentSpace = occurrence.parameters.get(0) as OpenEventSpace
+		
+		// Register to all required space
+		occurrence.parameters.filter[o|o instanceof OpenEventSpace].forEach[o|(o as OpenEventSpace).register(asEventListener())]
+	}
+	
+	on AgentSpawned [occurrence.agentType === ControlVirtualCarAgent.typeName] {
+		
+	}
+
+	on AgentKilled [occurrence.agentType === ControlVirtualCarAgent.typeName] {
+		
+	}
+}
