@@ -1,0 +1,11 @@
+package driver
+
+import driver.capacities.ObstaclePerception
+import java.util.List
+import environment.EnvironmentObject
+
+public skill RadarPerception implements ObstaclePerception {
+	override def perceiveObstacles() : List<EnvironmentObject> {
+		// TODO
+	}
+}

@@ -1,0 +1,13 @@
+package environment
+
+import javax.vecmath.Point2d
+
+public class EnvironmentObject {
+	val position : Point2d
+	val speed : double
+	
+	public new(position : Point2d, speed : double) {
+		this.position = position
+		this.speed = speed
+	}
+}
