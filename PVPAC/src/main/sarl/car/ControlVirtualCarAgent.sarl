@@ -49,16 +49,8 @@ agent ControlVirtualCarAgent {
 			throw new IllegalArgumentException("Internal vehicle space is not defined")
 		}
 
-		if (occurrence.parameters.length < 2) {
-			throw new IllegalArgumentException("Environment space is not defined")
-		}
-
 		if (!(occurrence.parameters.get(0) instanceof OpenEventSpace)) {
 			throw new IllegalArgumentException("First argument must be of type OpenEventSpace (internal vehicle space)")
-		}
-
-		if (!(occurrence.parameters.get(1) instanceof OpenEventSpace)) {
-			throw new IllegalArgumentException("Second argument must be of type OpenEventSpace (environment space)")
 		}
 		
 		// Register to appropriate spaces
@@ -68,7 +60,8 @@ agent ControlVirtualCarAgent {
 		this.internalVehicleSpace = occurrence.parameters.get(0) as OpenEventSpace
 		
 		// Initialize environment space
-		this.environmentSpace = occurrence.parameters.get(1) as OpenEventSpace
+		this.environmentSpace = SpaceUtils.getOrCreateSpaceWithSpec(defaultContext, typeof(OpenEventSpaceSpecification), Spaces.ENVIRONMENT)
+		this.environmentSpace.register(asEventListener())
 		
 		// Initialize model view space
 		this.modelViewSpace = SpaceUtils.getOrCreateSpaceWithSpec(defaultContext, typeof(OpenEventSpaceSpecification), Spaces.MODEL_VIEW)

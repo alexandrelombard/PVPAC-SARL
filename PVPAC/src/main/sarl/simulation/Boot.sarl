@@ -43,7 +43,7 @@ agent Boot {
 		val internalVehicleSpace = defaultContext.createSpace(typeof(OpenEventSpaceSpecification), UUID.randomUUID())
 		
 		spawn(DriverAgent, internalVehicleSpace)
-		spawn(ControlVirtualCarAgent, internalVehicleSpace, environmentSpace)
+		spawn(ControlVirtualCarAgent, internalVehicleSpace)
 		
 		killMe
 	}
