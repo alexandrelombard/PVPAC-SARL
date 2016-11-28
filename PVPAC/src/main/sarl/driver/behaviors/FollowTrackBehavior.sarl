@@ -1,0 +1,51 @@
+/** 
+ * 
+ */
+package driver.behaviors
+
+import model.map.Track
+import io.sarl.lang.core.Agent
+import car.capacities.control.SteeringWheelControlChange
+import car.events.PositionChanged
+import car.events.SpeedChanged
+import io.sarl.core.DefaultContextInteractions
+import driver.capacities.CruiseControl
+import driver.capacities.MapMatching
+import car.capacities.control.AccelerationControlChange
+import driver.capacities.FollowTrack
+
+/** 
+ * @author alombard
+ * 
+ */
+behavior FollowTrackBehavior {
+
+	uses DefaultContextInteractions
+	uses CruiseControl
+	uses FollowTrack
+	uses MapMatching
+	
+	private var track : Track
+	
+	private var speed : double
+	
+	public new(^agent : Agent, track : Track) {
+		super(^agent)
+		this.track = track
+	}
+	
+	on PositionChanged {
+		val mapMatchedLength = mapMatching(occurrence.position, this.track)
+		val steeringWheelAngle = followTrack(occurrence.position, occurrence.heading, mapMatchedLength, this.speed, this.track)
+
+		emit(new SteeringWheelControlChange(steeringWheelAngle))
+	}
+
+	on SpeedChanged {
+		this.speed = occurrence.speed
+
+		val acceleration = computeAcceleration(10, speed, -2, 2, 0.1)
+
+		emit(new AccelerationControlChange(acceleration))
+	}
+}

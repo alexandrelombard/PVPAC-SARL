@@ -18,6 +18,8 @@ import driver.capacities.MapMatching
 import model.map.Track
 import model.geom.Point2d
 import model.map.ProjectionModel
+import driver.behaviors.FollowTrackBehavior
+import io.sarl.core.Behaviors
 
 /** 
  * @author alombard
@@ -25,12 +27,7 @@ import model.map.ProjectionModel
  */
 agent DriverAgent {
 	
-	uses DefaultContextInteractions
-	uses CruiseControl
-	uses FollowTrack
-	uses MapMatching
-	
-	var speed = 0d
+	uses Behaviors
 	
 	var track : Track
 	
@@ -45,20 +42,10 @@ agent DriverAgent {
 		points.add(new Point2d(4000, 160))
 		
 		this.track = new Track("track", ProjectionModel.LAMBERT2E, points)
-	}
-
-	on PositionChanged {
-		val mapMatchedLength = mapMatching(occurrence.position, this.track)
-		val steeringWheelAngle = followTrack(occurrence.position, occurrence.heading, mapMatchedLength, this.speed, this.track)
 		
-		emit(new SteeringWheelControlChange(steeringWheelAngle))
-	}
-	
-	on SpeedChanged {
-		this.speed = occurrence.speed
+		// Initialize behavior
+		val followTrackBehavior = new FollowTrackBehavior(this, this.track)
 		
-		val acceleration = computeAcceleration(10, speed, -2, 2, 0.1)
-		
-		emit(new AccelerationControlChange(acceleration))
+		registerBehavior(followTrackBehavior)
 	}
 }
