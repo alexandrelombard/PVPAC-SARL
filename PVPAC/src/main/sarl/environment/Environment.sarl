@@ -43,6 +43,7 @@ agent Environment {
 	
 	on AgentSpawned [occurrence.agentType === ControlVirtualCarAgent.typeName] {
 		// TODO Schedule generation of perceptions
+		// TODO Replace agent spawned event references to agent joined (environment space) event references
 	}
 
 	on AgentKilled [occurrence.agentType === ControlVirtualCarAgent.typeName] {
