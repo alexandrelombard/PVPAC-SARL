@@ -29,11 +29,11 @@ agent Boot {
 	on Initialize {
 		
 		// Create global spaces
-		val modelViewSpace = SpaceUtils.getOrCreateSpaceWithSpec(defaultContext, typeof(OpenEventSpaceSpecification), "MODEL_VIEW")
-		val environmentSpace = SpaceUtils.getOrCreateSpaceWithSpec(defaultContext, typeof(OpenEventSpaceSpecification), "ENVIRONMENT")
+		val modelViewSpace = SpaceUtils.getOrCreateSpaceWithSpec(defaultContext, typeof(OpenEventSpaceSpecification), Spaces.MODEL_VIEW)
+		val environmentSpace = SpaceUtils.getOrCreateSpaceWithSpec(defaultContext, typeof(OpenEventSpaceSpecification), Spaces.ENVIRONMENT)
 		
 		// Boot agents
-		spawn(SimulationViewAgent, modelViewSpace)
+		spawn(SimulationViewAgent)
 		
 		synchronized (SimulationView) {
 			SimulationView.wait
@@ -43,7 +43,7 @@ agent Boot {
 		val internalVehicleSpace = defaultContext.createSpace(typeof(OpenEventSpaceSpecification), UUID.randomUUID())
 		
 		spawn(DriverAgent, internalVehicleSpace)
-		spawn(ControlVirtualCarAgent, internalVehicleSpace, environmentSpace, modelViewSpace)
+		spawn(ControlVirtualCarAgent, internalVehicleSpace, environmentSpace)
 		
 		killMe
 	}

@@ -1,0 +1,6 @@
+package simulation
+
+public class Spaces {
+	public static val MODEL_VIEW = "MODEL_VIEW"
+	public static val ENVIRONMENT = "ENVIRONMENT"
+}

@@ -24,6 +24,8 @@ import io.sarl.util.OpenEventSpaceSpecification
 import car.ControlVirtualCarAgent
 import io.sarl.core.Logging
 import io.sarl.core.Behaviors
+import utils.SpaceUtils
+import simulation.Spaces
 
 /** 
  * @author alombard
@@ -36,16 +38,8 @@ agent SimulationViewAgent {
 	private val carsView = new HashMap<UUID, ImageView>();
 	
 	on Initialize {
-		if(occurrence.parameters.size < 1) {
-			warning("Model-view space is not defined")
-		} else {
-			if(!(occurrence.parameters.get(0) instanceof OpenEventSpace)) {
-				throw new IllegalArgumentException("First argument must be of type OpenEventSpace (model-view space)")
-			}
-		}
-		
 		// Register to appropriate spaces
-		occurrence.parameters.forEach([o|if(o instanceof OpenEventSpace) o.register(asEventListener())])
+		SpaceUtils.getOrCreateSpaceWithSpec(defaultContext, typeof(OpenEventSpaceSpecification), Spaces.MODEL_VIEW).register(asEventListener())
 		
 		// Start view
 		in(0)[Application.launch(SimulationView)]
