@@ -20,6 +20,8 @@ import model.geom.Point2d
 import model.map.ProjectionModel
 import driver.behaviors.FollowTrackBehavior
 import io.sarl.core.Behaviors
+import io.sarl.lang.core.Space
+import io.sarl.util.OpenEventSpace
 
 /** 
  * @author alombard
@@ -32,6 +34,10 @@ agent DriverAgent {
 	var track : Track
 	
 	on Initialize {
+		// Register to appropriate spaces
+		occurrence.parameters.forEach[o|if (o instanceof OpenEventSpace) o.register(asEventListener())]
+		
+		// Initialize skills
 		setSkill(new DefaultMapMatching, MapMatching)
 		setSkill(new ImprovedPurePursuit, FollowTrack)
 		setSkill(new DefaultCruiseControl, CruiseControl)

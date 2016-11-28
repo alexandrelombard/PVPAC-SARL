@@ -13,6 +13,8 @@ import car.ControlVirtualCarAgent
 import view.SimulationViewAgent
 import driver.DriverAgent
 import view.SimulationView
+import io.sarl.util.OpenEventSpaceSpecification
+import java.util.UUID
 
 /** 
  * @author alombard
@@ -21,16 +23,22 @@ import view.SimulationView
 agent Boot {
 	uses DefaultContextInteractions, Lifecycle
 	
-	on Initialize {		
+	on Initialize {
+		// Create global spaces
+		val modelViewSpace = defaultContext.getOrCreateSpaceWithSpec(typeof(OpenEventSpaceSpecification), UUID.randomUUID())
+		
 		// Boot agents
-		spawn(SimulationViewAgent)
+		spawn(SimulationViewAgent, modelViewSpace)
 		
 		synchronized (SimulationView) {
 			SimulationView.wait
 		}
 		
-		spawn(DriverAgent)
-		spawn(ControlVirtualCarAgent)
+		// Spawn vehicles
+		val internalVehicleSpace = defaultContext.getOrCreateSpaceWithSpec(typeof(OpenEventSpaceSpecification), UUID.randomUUID())
+		
+		spawn(DriverAgent, internalVehicleSpace)
+		spawn(ControlVirtualCarAgent, internalVehicleSpace, modelViewSpace)
 		
 		killMe
 	}

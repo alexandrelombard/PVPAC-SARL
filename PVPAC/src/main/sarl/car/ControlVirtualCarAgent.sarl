@@ -19,18 +19,55 @@ import car.events.SpeedChanged
 import car.skills.virtualcar.ControlVirtualCar
 import car.skills.virtualcar.PositionVirtualCar
 import model.VirtualCar
+import io.sarl.util.OpenEventSpace
+import io.sarl.core.Behaviors
+import io.sarl.core.Logging
 
 /** 
  * @author alombard
  * 
  */
 agent ControlVirtualCarAgent {
-	
+
+	uses Behaviors
+	uses Logging
 	uses DefaultContextInteractions, Schedules
 	uses AccelerationControl, SteeringWheelControl
 	uses PositionProvider, OdometryProvider
 	
+	private var internalVehicleSpace : OpenEventSpace
+	private var modelViewSpace : OpenEventSpace
+	
 	on Initialize {
+		// Check parameters
+		if (occurrence.parameters.length < 1) {
+			throw new IllegalArgumentException("Internal vehicle space is not defined")
+		}
+
+		if (occurrence.parameters.length < 2) {
+			warning("Model view space is not defined, default space will be used instead")
+		}
+
+		if (!(occurrence.parameters.get(0) instanceof OpenEventSpace)) {
+			throw new IllegalArgumentException("First argument must be of type OpenEventSpace (internal vehicle space)")
+		}
+		
+		if(occurrence.parameters.length >= 2 && !(occurrence.parameters.get(1) instanceof OpenEventSpace)) {
+			throw new IllegalArgumentException("Second argument must be of type OpenEventSpace (model-view space)")
+		}
+		
+		// Register to appropriate spaces
+		occurrence.parameters.forEach[o|if(o instanceof OpenEventSpace) o.register(asEventListener())]
+		
+		// Initialize internal vehicle space
+		this.internalVehicleSpace = occurrence.parameters.get(0) as OpenEventSpace
+		
+		// Initialize model view space
+		if(occurrence.parameters.length >= 2) {
+			this.modelViewSpace = occurrence.parameters.get(1) as OpenEventSpace
+		}
+		
+		// Initialize virtual car
 		val virtualCar = new VirtualCar()
 		
 		// Add skill control virtual car
@@ -43,8 +80,19 @@ agent ControlVirtualCarAgent {
 		every(30) [
 			virtualCar.update(0.030)
 			
-			emit(new PositionChanged(position, heading))
-			emit(new SpeedChanged(speed))
+			val positionChanged = new PositionChanged(position, heading)
+			val speedChanged = new SpeedChanged(speed)
+
+			// Emit events in internal vehicle space
+			this.internalVehicleSpace.emit(positionChanged)
+			this.internalVehicleSpace.emit(speedChanged)
+			
+			// Emit events in model-view space
+			if (this.modelViewSpace != null) {
+				this.modelViewSpace.emit(positionChanged)				
+			} else {
+				emit(positionChanged)
+			}
 		]
 	}
 	

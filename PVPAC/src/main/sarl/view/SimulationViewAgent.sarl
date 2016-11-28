@@ -23,17 +23,22 @@ import java.util.UUID
 import io.sarl.util.OpenEventSpaceSpecification
 import car.ControlVirtualCarAgent
 import io.sarl.core.Logging
+import io.sarl.core.Behaviors
 
 /** 
  * @author alombard
  * 
  */
 agent SimulationViewAgent {
-	uses DefaultContextInteractions, Logging, Schedules
+	uses Behaviors, DefaultContextInteractions, Logging, Schedules
 	
 	private val carsView = new HashMap<Address, ImageView>();
 	
 	on Initialize {
+		// Register to appropriate spaces
+		occurrence.parameters.forEach([o|if(o instanceof OpenEventSpace) o.register(asEventListener())])
+		
+		// Start view
 		in(0)[Application.launch(SimulationView)]
 	}
 	
