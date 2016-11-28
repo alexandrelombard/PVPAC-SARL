@@ -1,0 +1,22 @@
+package utils
+
+import io.sarl.lang.core.Space
+import io.sarl.lang.core.AgentContext
+import io.sarl.lang.core.SpaceSpecification
+import java.util.UUID
+
+public class SpaceUtils {
+
+	public static def <S extends Space> getOrCreateSpaceWithSpec(context : AgentContext,
+		spec : Class<? extends SpaceSpecification<S>>, name : String) : S {
+		return context.getOrCreateSpaceWithSpec(spec, UUID.nameUUIDFromBytes(name.bytes))
+	}
+	
+	public static def <S extends Space> getOrCreateSpaceWithSpec(context : AgentContext,
+		spec : Class<? extends SpaceSpecification<S>>,
+		name : String,
+		parameters : Object[]) : S {
+		return context.getOrCreateSpaceWithSpec(spec, UUID.nameUUIDFromBytes(name.bytes), parameters)
+	}
+	
+}

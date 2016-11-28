@@ -16,6 +16,7 @@ import java.util.UUID
 import io.sarl.core.Logging
 import io.sarl.core.DefaultContextInteractions
 import io.sarl.core.Lifecycle
+import utils.SpaceUtils
 
 /** 
  * @author alombard
@@ -28,8 +29,8 @@ agent Boot {
 	on Initialize {
 		
 		// Create global spaces
-		val modelViewSpace = defaultContext.createSpace(typeof(OpenEventSpaceSpecification), UUID.randomUUID())
-		val environmentSpace = defaultContext.createSpace(typeof(OpenEventSpaceSpecification), UUID.randomUUID())
+		val modelViewSpace = SpaceUtils.getOrCreateSpaceWithSpec(defaultContext, typeof(OpenEventSpaceSpecification), "MODEL_VIEW")
+		val environmentSpace = SpaceUtils.getOrCreateSpaceWithSpec(defaultContext, typeof(OpenEventSpaceSpecification), "ENVIRONMENT")
 		
 		// Boot agents
 		spawn(SimulationViewAgent, modelViewSpace)
@@ -39,7 +40,7 @@ agent Boot {
 		}
 		
 		// Spawn vehicles
-		val internalVehicleSpace = defaultContext.createSpace(typeof(OpenEventSpaceSpecification), UUID.randomUUID())
+		val internalVehicleSpace = SpaceUtils.getOrCreateSpaceWithSpec(defaultContext, typeof(OpenEventSpaceSpecification), "INTERNAL_VEHICLE")
 		
 		spawn(DriverAgent, internalVehicleSpace)
 		spawn(ControlVirtualCarAgent, internalVehicleSpace, environmentSpace, modelViewSpace)
