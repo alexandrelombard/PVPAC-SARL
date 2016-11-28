@@ -2,6 +2,9 @@
  * 
  */
 package car.events
+
+import io.sarl.lang.core.Address
+
 /** 
  * @author alombard
  * 
@@ -9,7 +12,9 @@ package car.events
 event SpeedChanged {
 	val speed : double
 	
-	public new(speed : double) {
+	public new(source : Address, speed : double) {
+		super(source)
+		
 		this.speed = speed
 	}
 }

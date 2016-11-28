@@ -22,6 +22,7 @@ import model.VirtualCar
 import io.sarl.util.OpenEventSpace
 import io.sarl.core.Behaviors
 import io.sarl.core.Logging
+import io.sarl.lang.core.Address
 
 /** 
  * @author alombard
@@ -79,19 +80,16 @@ agent ControlVirtualCarAgent {
 		// Configure pro-active behavior (update car)
 		every(30) [
 			virtualCar.update(0.030)
-			
-			val positionChanged = new PositionChanged(position, heading)
-			val speedChanged = new SpeedChanged(speed)
 
 			// Emit events in internal vehicle space
-			this.internalVehicleSpace.emit(positionChanged)
-			this.internalVehicleSpace.emit(speedChanged)
+			this.internalVehicleSpace.emit(new PositionChanged(this.internalVehicleSpace.getAddress(this.ID), position, heading))
+			this.internalVehicleSpace.emit(new SpeedChanged(this.internalVehicleSpace.getAddress(this.ID), speed))
 			
 			// Emit events in model-view space
 			if (this.modelViewSpace != null) {
-				this.modelViewSpace.emit(positionChanged)				
+				this.modelViewSpace.emit(new PositionChanged(this.modelViewSpace.getAddress(this.ID), position, heading))				
 			} else {
-				emit(positionChanged)
+				emit(new PositionChanged(this.modelViewSpace.getAddress(this.ID), position, heading))
 			}
 		]
 	}

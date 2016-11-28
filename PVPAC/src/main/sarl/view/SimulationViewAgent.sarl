@@ -33,7 +33,7 @@ agent SimulationViewAgent {
 	
 	uses Behaviors, DefaultContextInteractions, Logging, Schedules
 	
-	private val carsView = new HashMap<Address, ImageView>();
+	private val carsView = new HashMap<UUID, ImageView>();
 	
 	on Initialize {
 		if(occurrence.parameters.size < 1) {
@@ -56,23 +56,23 @@ agent SimulationViewAgent {
 		carView.setFitHeight(5d);
 		carView.setFitWidth(5d);
 
-		carsView.put(occurrence.source, carView)
+		carsView.put(occurrence.source.UUID, carView)
 
 		Platform.runLater([SimulationView.instance.root.children.add(carView)])
 	}
 	
 	on AgentKilled [occurrence.agentType === ControlVirtualCarAgent.typeName] {
-		val carView = carsView.get(occurrence.source)
+		val carView = carsView.get(occurrence.source.UUID)
 		
 		if (carView != null) {
-			carsView.remove(occurrence.source)
+			carsView.remove(occurrence.source.UUID)
 			
 			Platform.runLater([SimulationView.instance.root.children.remove(carView)])
 		}
 	}
 	
 	on PositionChanged {		
-		val carView = carsView.get(occurrence.source)
+		val carView = carsView.get(occurrence.source.UUID)
 		
 		if(carView != null) {
 			carView.layoutX = occurrence.position.x
