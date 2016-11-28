@@ -49,7 +49,7 @@ agent ControlVirtualCarAgent {
 	}
 	
 	on AccelerationControlChange {
-		accelerate(occurrence.acceleration)
+		acceleration = occurrence.acceleration
 	}
 	
 	on SteeringWheelControlChange {

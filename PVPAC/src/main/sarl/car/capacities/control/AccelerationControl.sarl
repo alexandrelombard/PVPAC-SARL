@@ -5,5 +5,5 @@ package car.capacities.control
  * 
  */
 capacity AccelerationControl {
-	def accelerate(a : double)
+	def setAcceleration(a : double)
 }

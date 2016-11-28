@@ -13,7 +13,7 @@ skill ControlVirtualCar implements AccelerationControl, SteeringWheelControl {
 		this.virtualCar = virtualCar
 	}
 
-	override accelerate(a : double) {
+	override setAcceleration(a : double) {
 		virtualCar.acceleration = a
 	}
 
