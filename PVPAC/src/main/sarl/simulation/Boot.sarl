@@ -29,6 +29,7 @@ agent Boot {
 		
 		// Create global spaces
 		val modelViewSpace = defaultContext.createSpace(typeof(OpenEventSpaceSpecification), UUID.randomUUID())
+		val environmentSpace = defaultContext.createSpace(typeof(OpenEventSpaceSpecification), UUID.randomUUID())
 		
 		// Boot agents
 		spawn(SimulationViewAgent, modelViewSpace)
@@ -41,7 +42,7 @@ agent Boot {
 		val internalVehicleSpace = defaultContext.createSpace(typeof(OpenEventSpaceSpecification), UUID.randomUUID())
 		
 		spawn(DriverAgent, internalVehicleSpace)
-		spawn(ControlVirtualCarAgent, internalVehicleSpace, modelViewSpace)
+		spawn(ControlVirtualCarAgent, internalVehicleSpace, environmentSpace, modelViewSpace)
 		
 		killMe
 	}

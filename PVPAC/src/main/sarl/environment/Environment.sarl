@@ -42,7 +42,7 @@ agent Environment {
 	}
 	
 	on AgentSpawned [occurrence.agentType === ControlVirtualCarAgent.typeName] {
-		
+		// TODO Create an abstract representation of the virtual car
 	}
 
 	on AgentKilled [occurrence.agentType === ControlVirtualCarAgent.typeName] {
