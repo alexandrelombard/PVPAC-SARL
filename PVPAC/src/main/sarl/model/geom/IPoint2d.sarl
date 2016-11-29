@@ -7,4 +7,8 @@ public abstract class IPoint2d {
 	public def distance(p : IPoint2d) {
 		return Math.sqrt(Math.pow(x - p.x, 2) + Math.pow(y - p.y, 2))		
 	}
+	
+	override toString {
+		return "[" + x + ", " + y + "]"
+	}
 }

@@ -45,7 +45,7 @@ agent SimulationViewAgent {
 		in(0)[Application.launch(SimulationView)]
 	}
 	
-	on AgentSpawned [occurrence.agentType === ControlVirtualCarAgent.typeName] {		
+	on AgentSpawned [occurrence.agentType === ControlVirtualCarAgent.typeName] {
 		val carView = new ImageView(new Image("car.png"))
 		carView.setFitHeight(5d);
 		carView.setFitWidth(5d);
