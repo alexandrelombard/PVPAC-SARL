@@ -1,4 +1,4 @@
-package car.skills.virtualcar
+package car.virtualcar.skills
 
 import car.capacities.control.AccelerationControl
 import car.capacities.control.SteeringWheelControl

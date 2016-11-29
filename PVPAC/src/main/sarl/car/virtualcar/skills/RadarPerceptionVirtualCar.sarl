@@ -1,4 +1,4 @@
-package car.skills.virtualcar
+package car.virtualcar.skills
 
 import car.capacities.data.ObstaclePerception
 import java.util.List

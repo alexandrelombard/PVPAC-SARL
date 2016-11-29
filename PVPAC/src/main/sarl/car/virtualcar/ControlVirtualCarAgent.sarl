@@ -16,8 +16,8 @@ import car.capacities.data.OdometryProvider
 import car.capacities.data.PositionProvider
 import car.events.PositionChanged
 import car.events.SpeedChanged
-import car.skills.virtualcar.ControlVirtualCar
-import car.skills.virtualcar.PositionVirtualCar
+import car.virtualcar.skills.ControlVirtualCar
+import car.virtualcar.skills.PositionVirtualCar
 import model.VirtualCar
 import io.sarl.util.OpenEventSpace
 import io.sarl.core.Behaviors
