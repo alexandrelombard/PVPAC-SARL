@@ -4,12 +4,12 @@
 package driver.capacities
 
 import model.map.Track
-import model.geom.Point2d
+import model.geom.IPoint2d
 
 /** 
  * @author alombard
  * 
  */
 capacity FollowTrack {
-	def followTrack(position : Point2d, heading : double, mapMatchedLength : double, speed : double, track : Track) : double
+	def followTrack(position : IPoint2d, heading : double, mapMatchedLength : double, speed : double, track : Track) : double
 }

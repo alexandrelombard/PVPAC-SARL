@@ -5,10 +5,11 @@ import fr.utbm.set.geom.GeometryUtil
 import driver.capacities.MapMatching
 import model.map.Track
 import model.geom.Point2d
+import model.geom.IPoint2d
 
 skill DefaultMapMatching implements MapMatching {
 
-	override mapMatching(position : Point2d, track : Track) : double {
+	override mapMatching(position : IPoint2d, track : Track) : double {
 		// We compute the map-matched positionning
         if (track == null || position == null) {
 			throw new IllegalArgumentException()

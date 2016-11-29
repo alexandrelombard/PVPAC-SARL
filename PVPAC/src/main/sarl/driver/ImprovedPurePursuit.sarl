@@ -1,13 +1,13 @@
 package driver
 
 import driver.capacities.FollowTrack
-import model.geom.Point2d
 import model.map.Track
 import model.VirtualCar
+import model.geom.IPoint2d
 
 skill ImprovedPurePursuit implements FollowTrack {
 
-	override followTrack(position : Point2d, heading : double, mapMatchedLength : double, speed : double, track : Track) : double {
+	override followTrack(position : IPoint2d, heading : double, mapMatchedLength : double, speed : double, track : Track) : double {
 		val targetDistance = mapMatchedLength + speed
 		val targetPoint = track.getPoint(targetDistance % track.getLength())
 

@@ -57,7 +57,7 @@ agent Environment {
 		if(environment.containsKey(id)) {
 			environment.put(id, new EnvironmentObject(environment.get(id).position, occurrence.speed))
 		} else {
-			environment.put(id, new EnvironmentObject(new Point2d, occurrence.speed))
+			environment.put(id, new EnvironmentObject(new Point2d(Double.NaN, Double.NaN), occurrence.speed))
 		}
 	}
 }
