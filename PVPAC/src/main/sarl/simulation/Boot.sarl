@@ -45,7 +45,7 @@ agent Boot {
 			SimulationView.wait
 		}
 		
-		for (var i = 0; i < 2; i++) {
+		for (var i = 0; i < 1; i++) {
 			// Spawn vehicles
 			val internalVehicleSpace = defaultContext.createSpace(typeof(OpenEventSpaceSpecification), UUID.randomUUID())
 

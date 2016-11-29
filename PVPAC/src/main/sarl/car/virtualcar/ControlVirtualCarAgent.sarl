@@ -53,11 +53,9 @@ agent ControlVirtualCarAgent {
 			throw new IllegalArgumentException("First argument must be of type OpenEventSpace (internal vehicle space)")
 		}
 		
-		// Register to appropriate spaces
-		occurrence.parameters.forEach[o|if(o instanceof OpenEventSpace) o.register(asEventListener())]
-		
 		// Initialize internal vehicle space
 		this.internalVehicleSpace = occurrence.parameters.get(0) as OpenEventSpace
+		this.internalVehicleSpace.register(asEventListener())
 		
 		// Initialize environment space
 		this.environmentSpace = SpaceUtils.getOrCreateSpaceWithSpec(defaultContext, typeof(OpenEventSpaceSpecification), Spaces.ENVIRONMENT)
@@ -85,11 +83,7 @@ agent ControlVirtualCarAgent {
 			this.internalVehicleSpace.emit(new SpeedChanged(this.internalVehicleSpace.getAddress(this.ID), speed))
 			
 			// Emit events in model-view space
-			if (this.modelViewSpace != null) {
-				this.modelViewSpace.emit(new PositionChanged(this.modelViewSpace.getAddress(this.ID), position, heading))				
-			} else {
-				emit(new PositionChanged(this.modelViewSpace.getAddress(this.ID), position, heading))
-			}
+			this.modelViewSpace.emit(new PositionChanged(this.modelViewSpace.getAddress(this.ID), position, heading))				
 		]
 	}
 	

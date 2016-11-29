@@ -14,6 +14,7 @@ import driver.capacities.MapMatching
 import car.capacities.control.AccelerationControlChange
 import driver.capacities.FollowTrack
 import io.sarl.util.OpenEventSpace
+import io.sarl.core.Logging
 
 /** 
  * @author alombard
@@ -21,7 +22,7 @@ import io.sarl.util.OpenEventSpace
  */
 behavior FollowTrackBehavior {
 
-	uses DefaultContextInteractions
+	uses DefaultContextInteractions, Logging
 	uses CruiseControl
 	uses FollowTrack
 	uses MapMatching

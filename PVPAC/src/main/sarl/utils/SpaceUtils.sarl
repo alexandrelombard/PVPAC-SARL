@@ -7,16 +7,40 @@ import java.util.UUID
 
 public class SpaceUtils {
 
+	/**
+	 * Get or create a space with the given name
+	 * @param context the agent context
+	 * @param spec the specification
+	 * @param name the name of the space
+	 */
 	public static def <S extends Space> getOrCreateSpaceWithSpec(context : AgentContext,
 		spec : Class<? extends SpaceSpecification<S>>, name : String) : S {
-		return context.getOrCreateSpaceWithSpec(spec, UUID.nameUUIDFromBytes(name.bytes))
+		val ^space = context.<S>getSpace(UUID.nameUUIDFromBytes(name.bytes))
+
+		if(^space != null) {
+			 ^space
+		} else {
+			context.createSpace(spec, UUID.nameUUIDFromBytes(name.bytes))
+		}
 	}
-	
+	/** 
+	 * Get or create a space with the given name
+	 * @param context the agent context
+	 * @param spec the specification
+	 * @param name the name of the space
+	 * @param parameters the parameters
+	 */
 	public static def <S extends Space> getOrCreateSpaceWithSpec(context : AgentContext,
 		spec : Class<? extends SpaceSpecification<S>>,
 		name : String,
 		parameters : Object[]) : S {
-		return context.getOrCreateSpaceWithSpec(spec, UUID.nameUUIDFromBytes(name.bytes), parameters)
+		val ^space = context.<S>getSpace(UUID.nameUUIDFromBytes(name.bytes))
+		
+		if(^space != null) {
+			^space
+		} else {
+			context.createSpace(spec, UUID.nameUUIDFromBytes(name.bytes), parameters)
+		}
 	}
 	
 }
