@@ -35,6 +35,7 @@ behavior FollowTrackBehavior {
 	
 	public new(^agent : Agent, ^space : OpenEventSpace, track : Track) {
 		super(^agent)
+		
 		this.^space = ^space
 		this.track = track
 	}
@@ -45,13 +46,5 @@ behavior FollowTrackBehavior {
 			this.track)
 
 		^space.emit(new SteeringWheelControlChange(steeringWheelAngle))
-	}
-
-	on SpeedChanged {
-		this.speed = occurrence.speed
-
-		val acceleration = computeAcceleration(10, speed, -2, 2, 0.1)
-
-		^space.emit(new AccelerationControlChange(acceleration))
 	}
 }

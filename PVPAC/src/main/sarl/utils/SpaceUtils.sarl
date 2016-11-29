@@ -5,6 +5,9 @@ import io.sarl.lang.core.AgentContext
 import io.sarl.lang.core.SpaceSpecification
 import java.util.UUID
 
+/**
+ * Utility functions to manipulate spaces using names instead of UUID
+ */
 public class SpaceUtils {
 
 	/**

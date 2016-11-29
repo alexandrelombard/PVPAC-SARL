@@ -1,0 +1,36 @@
+package driver.behaviors
+
+import driver.capacities.CruiseControl
+import io.sarl.core.DefaultContextInteractions
+import io.sarl.core.Logging
+import environment.EnvironmentPerception
+import io.sarl.util.OpenEventSpace
+import io.sarl.lang.core.Agent
+import car.events.SpeedChanged
+import car.capacities.control.AccelerationControlChange
+
+behavior AdaptiveCruiseControlBehavior {
+	uses DefaultContextInteractions, Logging
+	uses CruiseControl
+
+	private var ^space : OpenEventSpace
+	
+	private var speed : double
+
+	public new(^agent : Agent, ^space : OpenEventSpace) {
+		super(^agent)
+		this.^space = ^space
+	}
+	
+	on SpeedChanged {
+		this.speed = occurrence.speed
+
+		val acceleration = computeAcceleration(10, speed, -2, 2, 0.1)
+
+		^space.emit(new AccelerationControlChange(acceleration))
+	}
+	
+	on EnvironmentPerception {
+		// TODO
+	}
+}
