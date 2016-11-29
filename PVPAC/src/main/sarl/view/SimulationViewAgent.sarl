@@ -55,15 +55,15 @@ agent SimulationViewAgent {
 		Platform.runLater([SimulationView.instance.root.children.add(carView)])
 	}
 	
-//	on AgentKilled [occurrence.agentType === ControlVirtualCarAgent.typeName] {
-//		val carView = carsView.get(occurrence.source.UUID)
-//		
-//		if (carView != null) {
-//			carsView.remove(occurrence.source.UUID)
-//			
-//			Platform.runLater([SimulationView.instance.root.children.remove(carView)])
-//		}
-//	}
+	on AgentKilled [occurrence.agentType === ControlVirtualCarAgent.typeName] {
+		val carView = carsView.get(occurrence.source.UUID)
+		
+		if (carView != null) {
+			carsView.remove(occurrence.source.UUID)
+			
+			Platform.runLater([SimulationView.instance.root.children.remove(carView)])
+		}
+	}
 	
 	on PositionChanged {		
 		val carView = carsView.get(occurrence.source.UUID)

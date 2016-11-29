@@ -30,8 +30,8 @@ agent Boot {
 	on Initialize {
 		
 		// Create global spaces
-//		val modelViewSpace = SpaceUtils.getOrCreateSpaceWithSpec(defaultContext, typeof(OpenEventSpaceSpecification), Spaces.MODEL_VIEW)
-//		val environmentSpace = SpaceUtils.getOrCreateSpaceWithSpec(defaultContext, typeof(OpenEventSpaceSpecification), Spaces.ENVIRONMENT)
+		val modelViewSpace = SpaceUtils.getOrCreateSpaceWithSpec(defaultContext, typeof(OpenEventSpaceSpecification), Spaces.MODEL_VIEW)
+		val environmentSpace = SpaceUtils.getOrCreateSpaceWithSpec(defaultContext, typeof(OpenEventSpaceSpecification), Spaces.ENVIRONMENT)
 		
 		// Boot agents
 		
