@@ -1,6 +1,6 @@
 package environment
 
-import javax.vecmath.Point2d
+import model.geom.Point2d
 
 public class EnvironmentObject {
 	val position : Point2d
