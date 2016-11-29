@@ -12,6 +12,12 @@ import model.VirtualCar
 import io.sarl.core.Initialize
 import io.sarl.util.OpenEventSpace
 import io.sarl.core.Behaviors
+import car.events.PositionChanged
+import io.sarl.core.Logging
+import utils.SpaceUtils
+import simulation.Spaces
+import io.sarl.core.DefaultContextInteractions
+import io.sarl.util.OpenEventSpaceSpecification
 
 /** 
  * @author alombard
@@ -19,26 +25,15 @@ import io.sarl.core.Behaviors
  */
 agent Environment {
 	
-	uses Behaviors
+	uses Behaviors, DefaultContextInteractions, Logging
 	
 	private val environment = new HashMap<UUID, EnvironmentObject>()
 	
 	private var environmentSpace : OpenEventSpace
 	
-	on Initialize {
-		// First parameter is environment space
-		if(occurrence.parameters.size() < 1) {
-			throw new IllegalArgumentException("Environment space is not defined")
-		}
-		
-		if(!(occurrence.parameters.get(0) instanceof OpenEventSpace)) {
-			throw new IllegalArgumentException("First parameter must be of type OpenEventSpace (environment space)")
-		}
-		
-		this.environmentSpace = occurrence.parameters.get(0) as OpenEventSpace
-		
-		// Register to all required space
-		occurrence.parameters.filter[o|o instanceof OpenEventSpace].forEach[o|(o as OpenEventSpace).register(asEventListener())]
+	on Initialize {		
+		this.environmentSpace = SpaceUtils.getOrCreateSpaceWithSpec(defaultContext, typeof(OpenEventSpaceSpecification), Spaces.ENVIRONMENT)
+		this.environmentSpace.register(asEventListener())
 	}
 	
 	on AgentSpawned [occurrence.agentType === ControlVirtualCarAgent.typeName] {
@@ -48,5 +43,9 @@ agent Environment {
 
 	on AgentKilled [occurrence.agentType === ControlVirtualCarAgent.typeName] {
 		
+	}
+	
+	on PositionChanged {
+		val id = occurrence.source.UUID
 	}
 }

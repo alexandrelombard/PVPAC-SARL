@@ -17,6 +17,7 @@ import io.sarl.core.Logging
 import io.sarl.core.DefaultContextInteractions
 import io.sarl.core.Lifecycle
 import utils.SpaceUtils
+import environment.Environment
 
 /** 
  * @author alombard
@@ -33,6 +34,11 @@ agent Boot {
 		val environmentSpace = SpaceUtils.getOrCreateSpaceWithSpec(defaultContext, typeof(OpenEventSpaceSpecification), Spaces.ENVIRONMENT)
 		
 		// Boot agents
+		
+		// Environment agent
+		spawn(Environment)
+		
+		// View agent
 		spawn(SimulationViewAgent)
 		
 		synchronized (SimulationView) {
