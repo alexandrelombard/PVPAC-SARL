@@ -1,9 +1,7 @@
 package simulation
-
 /** 
  * 
  */
-
 import io.sarl.core.Initialize
 
 import car.ControlVirtualCarAgent
@@ -18,43 +16,37 @@ import io.sarl.core.DefaultContextInteractions
 import io.sarl.core.Lifecycle
 import utils.SpaceUtils
 import environment.Environment
-
 /** 
  * @author alombard
  * 
  */
 agent Boot {
-	
+
 	uses DefaultContextInteractions, Lifecycle
-	
+
 	on Initialize {
-		
-		// Create global spaces
-		val modelViewSpace = SpaceUtils.getOrCreateSpaceWithSpec(defaultContext, typeof(OpenEventSpaceSpecification), Spaces.MODEL_VIEW)
-		val environmentSpace = SpaceUtils.getOrCreateSpaceWithSpec(defaultContext, typeof(OpenEventSpaceSpecification), Spaces.ENVIRONMENT)
-		
 		// Boot agents
-		
-		// Environment agent
+			// Environment agent
 		spawn(Environment)
-		
-		// View agent
+
+			// View agent
 		spawn(SimulationViewAgent)
-		
+
 		synchronized (SimulationView) {
 			SimulationView.wait
 		}
-		
-		for (var i = 0; i < 2; i++) {
+
+		for (var i = 0; i < 1; i++) {
 			// Spawn vehicles
-			val internalVehicleSpace = SpaceUtils.getOrCreateSpaceWithSpec(defaultContext, typeof(OpenEventSpaceSpecification), UUID.randomUUID())
+			val internalVehicleSpace = SpaceUtils.getOrCreateSpaceWithSpec(defaultContext,
+				typeof(OpenEventSpaceSpecification), UUID.randomUUID())
 
 			spawn(DriverAgent, internalVehicleSpace)
 			spawn(ControlVirtualCarAgent, internalVehicleSpace)
-			
+
 			Thread.sleep(5000)
 		}
-		
+
 		killMe
 	}
 }
