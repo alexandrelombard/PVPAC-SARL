@@ -9,6 +9,24 @@ import java.util.UUID
  * Utility functions to manipulate spaces using names instead of UUID
  */
 public class SpaceUtils {
+	
+	/**
+	 * Get or create a space with the given ID (if a space with the same ID already exists, it is returned,
+	 * otherwise, a new one is created)
+	 * @param context the agent context
+	 * @param spec the specification
+	 * @param id the ID of the space
+	 */
+	public static def <S extends Space> getOrCreateSpaceWithSpec(context : AgentContext,
+		spec : Class<? extends SpaceSpecification<S>>, id : UUID) : S {
+			val ^space = context.<S>getSpace(id)
+			
+			if(^space != null) {
+				^space
+			} else {
+				context.createSpace(spec, id)
+			}
+		}
 
 	/**
 	 * Get or create a space with the given name

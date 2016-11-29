@@ -26,6 +26,7 @@ import io.sarl.core.Logging
 import io.sarl.core.Behaviors
 import utils.SpaceUtils
 import simulation.Spaces
+import java.util.concurrent.ConcurrentHashMap
 
 /** 
  * @author alombard
@@ -35,7 +36,7 @@ agent SimulationViewAgent {
 	
 	uses Behaviors, DefaultContextInteractions, Logging, Schedules
 	
-	private val carsView = new HashMap<UUID, ImageView>();
+	private val carsView = new ConcurrentHashMap<UUID, ImageView>();
 	
 	on Initialize {
 		// Register to appropriate spaces

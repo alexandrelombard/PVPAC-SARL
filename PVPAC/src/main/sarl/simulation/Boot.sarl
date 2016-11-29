@@ -47,7 +47,7 @@ agent Boot {
 		
 		for (var i = 0; i < 2; i++) {
 			// Spawn vehicles
-			val internalVehicleSpace = defaultContext.createSpace(typeof(OpenEventSpaceSpecification), UUID.randomUUID())
+			val internalVehicleSpace = SpaceUtils.getOrCreateSpaceWithSpec(defaultContext, typeof(OpenEventSpaceSpecification), UUID.randomUUID())
 
 			spawn(DriverAgent, internalVehicleSpace)
 			spawn(ControlVirtualCarAgent, internalVehicleSpace)

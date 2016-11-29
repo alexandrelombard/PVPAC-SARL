@@ -75,8 +75,8 @@ agent ControlVirtualCarAgent {
 		setSkill(new PositionVirtualCar(virtualCar))
 		
 		// Configure pro-active behavior (update car)
-		every(30) [
-			virtualCar.update(0.030)
+		every(50) [
+			virtualCar.update(0.050)
 
 			// Emit events in internal vehicle space
 			this.internalVehicleSpace.emit(new PositionChanged(this.internalVehicleSpace.getAddress(this.ID), position, heading))
