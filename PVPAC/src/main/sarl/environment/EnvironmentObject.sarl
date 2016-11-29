@@ -1,13 +1,31 @@
 package environment
 
 import model.geom.Point2d
+import model.geom.IPoint2d
 
 public class EnvironmentObject {
-	val position : Point2d
-	val speed : double
+	val position : IPoint2d
+	var speed : double
 	
-	public new(position : Point2d, speed : double) {
+	public new {
+		this.position = new Point2d
+		this.speed = 0
+	}
+	
+	public new(position : IPoint2d, speed : double) {
 		this.position = position
+		this.speed = speed
+	}
+	
+	public def getPosition {
+		return position
+	}
+	
+	public def getSpeed {
+		return speed
+	}
+	
+	public def setSpeed(speed : double) {
 		this.speed = speed
 	}
 }

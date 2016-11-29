@@ -1,0 +1,20 @@
+package model.geom
+
+class ImmutablePoint2d extends IPoint2d {
+	val x : double
+	val y : double
+	
+	public new (x : double, y : double) {
+		this.x = x
+		this.y = y
+	}
+	
+	override getX : double {
+		x
+	}
+
+	override getY : double {
+		y
+	}
+
+}

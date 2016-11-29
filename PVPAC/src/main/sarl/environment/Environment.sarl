@@ -18,6 +18,9 @@ import utils.SpaceUtils
 import simulation.Spaces
 import io.sarl.core.DefaultContextInteractions
 import io.sarl.util.OpenEventSpaceSpecification
+import car.events.SpeedChanged
+import java.util.concurrent.ConcurrentHashMap
+import model.geom.Point2d
 
 /** 
  * @author alombard
@@ -27,25 +30,34 @@ agent Environment {
 	
 	uses Behaviors, DefaultContextInteractions, Logging
 	
-	private val environment = new HashMap<UUID, EnvironmentObject>()
+	private val environment = new ConcurrentHashMap<UUID, EnvironmentObject>()
 	
 	private var environmentSpace : OpenEventSpace
 	
 	on Initialize {		
 		this.environmentSpace = SpaceUtils.getOrCreateSpaceWithSpec(defaultContext, typeof(OpenEventSpaceSpecification), Spaces.ENVIRONMENT)
 		this.environmentSpace.register(asEventListener())
-	}
-	
-	on AgentSpawned [occurrence.agentType === ControlVirtualCarAgent.typeName] {
-		// TODO Schedule generation of perceptions
-		// TODO Replace agent spawned event references to agent joined (environment space) event references
-	}
 
-	on AgentKilled [occurrence.agentType === ControlVirtualCarAgent.typeName] {
-		
+		// TODO Schedule generation of perceptions
 	}
 	
 	on PositionChanged {
 		val id = occurrence.source.UUID
+		
+		if(environment.containsKey(id)) {
+			environment.put(id, new EnvironmentObject(occurrence.position, environment.get(id).speed))
+		} else {
+			environment.put(id, new EnvironmentObject(occurrence.position, 0))
+		}
+	}
+	
+	on SpeedChanged {
+		val id = occurrence.source.UUID
+		
+		if(environment.containsKey(id)) {
+			environment.put(id, new EnvironmentObject(environment.get(id).position, occurrence.speed))
+		} else {
+			environment.put(id, new EnvironmentObject(new Point2d, occurrence.speed))
+		}
 	}
 }

@@ -5,16 +5,17 @@ package car.events
 
 import model.geom.Point2d
 import io.sarl.lang.core.Address
+import model.geom.IPoint2d
 
 /** 
  * @author alombard
  * 
  */
 event PositionChanged {
-	val position : Point2d
+	val position : IPoint2d
 	val heading : double
 	
-	public new(source : Address, position : Point2d, heading : double) {
+	public new(source : Address, position : IPoint2d, heading : double) {
 		super(source)
 		
 		this.position = position

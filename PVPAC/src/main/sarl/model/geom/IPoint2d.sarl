@@ -1,0 +1,10 @@
+package model.geom
+
+public abstract class IPoint2d {
+	public abstract def getX : double
+	public abstract def getY : double
+	
+	public def distance(p : IPoint2d) {
+		return Math.sqrt(Math.pow(x - p.x, 2) + Math.pow(y - p.y, 2))		
+	}
+}

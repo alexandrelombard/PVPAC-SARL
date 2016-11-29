@@ -1,6 +1,6 @@
 package model.geom
 
-class Point2d {
+class Point2d extends IPoint2d {
 	public var x : double
 	public var y : double
 	
@@ -14,7 +14,20 @@ class Point2d {
 		this.y = y
 	}
 	
-	public def distance(p : Point2d) {
-		return Math.sqrt(Math.pow(x - p.x, 2) + Math.pow(y - p.y, 2))
+	override getX : double {
+		x
 	}
+
+	override getY : double {
+		y
+	}
+	
+	public def setX(x : double) {
+		this.x = x
+	}
+	
+	public def setY(y : double) {
+		this.y = y
+	}
+	
 }
